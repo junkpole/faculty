@@ -5,8 +5,10 @@ FROM python:3.10-slim
 WORKDIR /app
 
 # 1. Update apt and install all the system dependencies
-# This replaces packages.txt
+#    ADDED 'build-essential' for C compilers
 RUN apt-get update && apt-get install -y \
+    # For building packages
+    build-essential \
     # For OpenCV
     libgl1 \
     libglib2.0-0 \
@@ -23,13 +25,17 @@ RUN apt-get update && apt-get install -y \
     # Clean up
     && rm -rf /var/lib/apt/lists/*
 
-# 2. Copy your requirements file and install Python packages
+# 2. SET THE ENVIRONMENT VARIABLE
+#    This tells pkg-config where to find the libraries
+ENV PKG_CONFIG_PATH /usr/lib/x86_64-linux-gnu/pkgconfig:/usr/share/pkgconfig
+
+# 3. Copy your requirements file and install Python packages
+#    This line (previously #28) will now run AFTER the ENV
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 3. Copy the rest of your application code
+# 4. Copy the rest of your application code
 COPY . .
 
-# 4. Set the command to run your app
-# We add --server.port $PORT so Render can route traffic
+# 5. Set the command to run your app
 CMD ["streamlit", "run", "app.py", "--server.port", "10000"]
