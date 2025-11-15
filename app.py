@@ -1,6 +1,6 @@
 import cv2
 import streamlit as st
-from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, RTCConfiguration
+from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, RTCConfiguration, WebRtcMode # <-- Import WebRtcMode
 import av
 import numpy as np
 
@@ -52,11 +52,11 @@ rtc_configuration = RTCConfiguration(
 )
 
 # --- Centered Web Component ---
-# We put the video streamer inside the middle column we created earlier
+# We put the video streamer inside the middle column
 with col2:
     webrtc_streamer(
         key="classroom-feed",
-        mode=1, # Send and Receive mode
+        mode=WebRtcMode.SENDRECV, # <-- This line is corrected
         rtc_configuration=rtc_configuration,
         video_processor_factory=VideoProcessor,
         media_stream_constraints={"video": True, "audio": False},
@@ -64,6 +64,5 @@ with col2:
     )
 
 # --- Footer ---
-# This code will now run because the crash is fixed.
 st.markdown("---")
 st.caption("Copyright © Termez State University of Engineering and Agrotechnology / [IT Department](https://instagram.com/iamumarsatti/#)")
