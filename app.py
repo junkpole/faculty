@@ -30,7 +30,7 @@ face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_fronta
 class VideoProcessor(VideoProcessorBase):
     def recv(self, frame):
         img = frame.to_ndarray(format="bgr24")
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR_GRAY)
         faces = face_cascade.detectMultiScale(gray, 1.1, 4)
 
         for (x, y, w, h) in faces:
@@ -58,10 +58,16 @@ with col2:
         rtc_configuration=rtc_configuration,
         video_processor_factory=VideoProcessor,
         media_stream_constraints={"video": True, "audio": False},
-        async_processing=False  # <-- THIS IS THE FIX
+        async_processing=False  # Keep this as False for stability
     )
 
-# --- Centered Footer ---
+# --- Centered Footer (FIXED) ---
 st.markdown("---")
-footer_text = "Copyright © Termez State University of Engineering and Agrotechnology / [IT Department](https://instagram.com/iamumarsatti/#)"
-st.markdown(f"<p style='text-align: center;'>{footer_text}</p>", unsafe_allow_html=True)
+# We must use pure HTML to get a centered link
+footer_html = """
+<p style='text-align: center;'>
+    Copyright © Termez State University of Engineering and Agrotechnology / 
+    <a href='https://instagram.com/iamumarsatti/' target='_blank'>IT Department</a>
+</p>
+"""
+st.markdown(footer_html, unsafe_allow_html=True)
