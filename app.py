@@ -56,13 +56,12 @@ rtc_configuration = RTCConfiguration(
 # The Web Component
 webrtc_streamer(
     key="classroom-feed",
-    mode=1, # Send and Receive mode (This is the corrected line)
+    mode=1, # Send and Receive mode
     rtc_configuration=rtc_configuration,
     video_processor_factory=VideoProcessor,
     media_stream_constraints={"video": True, "audio": False},
-    async_processing=True,
-    # Make the video component wider to fit the new layout
-    video_container_style={"border": "1px solid #e0e0e0", "border-radius": "8px", "overflow": "hidden"},
+    async_processing=True
+    # The 'video_container_style' argument has been removed
 )
 
 # --- Footer ---
