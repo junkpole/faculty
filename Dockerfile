@@ -1,5 +1,5 @@
-# Start from a stable Python 10 environment
-FROM python:3.10-slim
+# Start from Debian Bookworm, which has newer ffmpeg libraries
+FROM python:3.10-slim-bookworm
 
 # Set a working directory
 WORKDIR /app
@@ -37,7 +37,6 @@ COPY requirements.txt .
 
 # 5. (THIS IS THE FIX-PART-2)
 #    Install Python packages using --no-build-isolation
-#    This forces pip to use the Cython we just installed
 RUN pip install --no-cache-dir --no-build-isolation -r requirements.txt
 
 # 6. Copy the rest of your application code
