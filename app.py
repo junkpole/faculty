@@ -8,22 +8,20 @@ import numpy as np
 # Use a wide layout and set the page title
 st.set_page_config(page_title="TDMAU Pro", layout="wide", page_icon="🎓")
 
-# --- Target UI Header ---
-# This section mimics the header from the tdmau.netlify.app site
+# --- Centered Header ---
+# We use st.markdown with unsafe_allow_html=True to center the text
+st.markdown("<h1 style='text-align: center;'>TDMAU Pro</h1>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center;'>Termiz davlat muhandislik va agrotexnologiyalar universiteti</h3>", unsafe_allow_html=True)
 
-# 1. Main Title
-st.title("TDMAU Pro")
+# We use columns to center the image. [1, 5, 1] means the middle column is 5x wider
+col1, col2, col3 = st.columns([1, 5, 1])
+with col2:
+    st.image("https://3cn91n41op.ucarecd.net/e88745d3-4a99-45ab-8d6a-274e6fccdd4d/IMG_20251014_180951_896.png")
 
-# 2. Subtitle
-st.subheader("Termiz davlat muhandislik va agrotexnologiyalar universiteti")
+# --- Centered Application ---
+st.markdown("<h2 style='text-align: center;'>🎓 Teacher Presence Detector (Demo)</h2>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center;'>Click 'Start' to enable the webcam and begin detecting.</p>", unsafe_allow_html=True)
 
-# 3. Banner Image (This is the URL from the site)
-st.image("https://3cn91n41op.ucarecd.net/e88745d3-4a99-45ab-8d6a-274e6fccdd4d/IMG_20251014_180951_896.png")
-
-# --- Your Application ---
-# This is your video detector, now placed below the new header
-st.header("🎓 Teacher Presence Detector (Demo)")
-st.write("Click 'Start' to enable the webcam and begin detecting.")
 
 # Load the face detector
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
@@ -53,18 +51,19 @@ rtc_configuration = RTCConfiguration(
     {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
 )
 
-# The Web Component
-webrtc_streamer(
-    key="classroom-feed",
-    mode=1, # Send and Receive mode
-    rtc_configuration=rtc_configuration,
-    video_processor_factory=VideoProcessor,
-    media_stream_constraints={"video": True, "audio": False},
-    async_processing=True
-    # The 'video_container_style' argument has been removed
-)
+# --- Centered Web Component ---
+# We put the video streamer inside the middle column we created earlier
+with col2:
+    webrtc_streamer(
+        key="classroom-feed",
+        mode=1, # Send and Receive mode
+        rtc_configuration=rtc_configuration,
+        video_processor_factory=VideoProcessor,
+        media_stream_constraints={"video": True, "audio": False},
+        async_processing=True
+    )
 
 # --- Footer ---
-# This is the updated footer with your text and hyperlink
+# This code will now run because the crash is fixed.
 st.markdown("---")
 st.caption("Copyright © Termez State University of Engineering and Agrotechnology / [IT Department](https://instagram.com/iamumarsatti/#)")
