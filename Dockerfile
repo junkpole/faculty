@@ -5,7 +5,6 @@ FROM python:3.10-slim
 WORKDIR /app
 
 # 1. Update apt and install all the system dependencies
-#    ADDED 'build-essential' for C compilers
 RUN apt-get update && apt-get install -y \
     # For building packages
     build-essential \
@@ -29,13 +28,20 @@ RUN apt-get update && apt-get install -y \
 #    This tells pkg-config where to find the libraries
 ENV PKG_CONFIG_PATH /usr/lib/x86_64-linux-gnu/pkgconfig:/usr/share/pkgconfig
 
-# 3. Copy your requirements file and install Python packages
-#    This line (previously #28) will now run AFTER the ENV
+# 3. Copy your requirements file
 COPY requirements.txt .
+
+# 4. (THIS IS THE FIX)
+#    Install the correct Cython version *before* installing requirements
+#    av==10.0.0 requires Cython < 3.0
+RUN pip install --no-cache-dir Cython~=0.29.36
+
+# 5. Install Python packages
+#    This will now use the Cython version we just installed
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 4. Copy the rest of your application code
+# 6. Copy the rest of your application code
 COPY . .
 
-# 5. Set the command to run your app
+# 7. Set the command to run your app
 CMD ["streamlit", "run", "app.py", "--server.port", "10000"]
