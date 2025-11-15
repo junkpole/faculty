@@ -11,9 +11,14 @@ st.set_page_config(page_title="TDMAU Pro", layout="wide", page_icon="🎓")
 st.markdown("<h1 style='text-align: center;'>TDMAU Pro</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align: center;'>Termiz davlat muhandislik va agrotexnologiyalar universiteti</h3>", unsafe_allow_html=True)
 
-col1, col2, col3 = st.columns([1, 5, 1])
-with col2:
-    st.image("https://3cn91n41op.ucarecd.net/e88745d3-4a99-45ab-8d6a-274e6fccdd4d/IMG_20251014_180951_896.png")
+# --- Centered Logo (HTML Method) ---
+# This method uses HTML to force the image to be centered
+image_url = "https://3cn91n41op.ucarecd.net/e88745d3-4a99-45ab-8d6a-274e6fccdd4d/IMG_20251014_180951_896.png"
+st.markdown(f"""
+<div style="display: flex; justify-content: center;">
+    <img src="{image_url}" alt="University Logo" style="max-width: 100%; width: 70%;">
+</div>
+""", unsafe_allow_html=True)
 
 # --- Centered Application ---
 st.markdown("<h2 style='text-align: center;'>🎓 Teacher Presence Detector (Demo)</h2>", unsafe_allow_html=True)
@@ -36,8 +41,7 @@ class VideoProcessor(VideoProcessorBase):
 
         return av.VideoFrame.from_ndarray(img, format="bgr24")
 
-# --- NEW WEBRTC Configuration ---
-# We are adding more public STUN servers to make the connection more reliable
+# WEBRTC Configuration (with multiple STUN servers)
 rtc_configuration = RTCConfiguration(
     {"iceServers": [
         {"urls": ["stun:stun.l.google.com:19302"]},
@@ -47,16 +51,20 @@ rtc_configuration = RTCConfiguration(
 )
 
 # --- Centered Web Component ---
+# We use columns to keep the video player from being too wide
+col1, col2, col3 = st.columns([1, 5, 1])
 with col2:
     webrtc_streamer(
         key="classroom-feed",
         mode=WebRtcMode.SENDRECV,
-        rtc_configuration=rtc_configuration, # Pass the new configuration
+        rtc_configuration=rtc_configuration,
         video_processor_factory=VideoProcessor,
         media_stream_constraints={"video": True, "audio": False},
         async_processing=True
     )
 
-# --- Footer ---
+# --- Centered Footer ---
 st.markdown("---")
-st.caption("Copyright © Termez State University of Engineering and Agrotechnology / [IT Department](https://instagram.com/iamumarsatti/#)")
+# Use st.markdown to center the caption text
+footer_text = "Copyright © Termez State University of Engineering and Agrotechnology / [IT Department](https://instagram.com/iamumarsatti/#)"
+st.markdown(f"<p style='text-align: center;'>{footer_text}</p>", unsafe_allow_html=True)
