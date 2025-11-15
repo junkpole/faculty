@@ -12,7 +12,6 @@ st.markdown("<h1 style='text-align: center;'>TDMAU Pro</h1>", unsafe_allow_html=
 st.markdown("<h3 style='text-align: center;'>Termiz davlat muhandislik va agrotexnologiyalar universiteti</h3>", unsafe_allow_html=True)
 
 # --- Centered Logo (HTML Method) ---
-# This method uses HTML to force the image to be centered
 image_url = "https://3cn91n41op.ucarecd.net/e88745d3-4a99-45ab-8d6a-274e6fccdd4d/IMG_20251014_180951_896.png"
 st.markdown(f"""
 <div style="display: flex; justify-content: center;">
@@ -51,7 +50,6 @@ rtc_configuration = RTCConfiguration(
 )
 
 # --- Centered Web Component ---
-# We use columns to keep the video player from being too wide
 col1, col2, col3 = st.columns([1, 5, 1])
 with col2:
     webrtc_streamer(
@@ -60,11 +58,10 @@ with col2:
         rtc_configuration=rtc_configuration,
         video_processor_factory=VideoProcessor,
         media_stream_constraints={"video": True, "audio": False},
-        async_processing=True
+        async_processing=False  # <-- THIS IS THE FIX
     )
 
 # --- Centered Footer ---
 st.markdown("---")
-# Use st.markdown to center the caption text
 footer_text = "Copyright © Termez State University of Engineering and Agrotechnology / [IT Department](https://instagram.com/iamumarsatti/#)"
 st.markdown(f"<p style='text-align: center;'>{footer_text}</p>", unsafe_allow_html=True)
