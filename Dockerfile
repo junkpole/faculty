@@ -28,15 +28,20 @@ RUN apt-get update && apt-get install -y \
 #    This tells pkg-config where to find the libraries
 ENV PKG_CONFIG_PATH /usr/lib/x86_64-linux-gnu/pkgconfig:/usr/share/pkgconfig
 
-# 3. Copy your requirements file
+# 3. (THIS IS THE FIX)
+#    Install the correct Cython version *before* installing requirements
+#    av==10.0.0 requires Cython < 3.0
+RUN pip install --no-cache-dir Cython==0.29.37
+
+# 4. Copy requirements file (which NO LONGER contains Cython)
 COPY requirements.txt .
 
-# 4. Install Python packages
-#    (The separate Cython install is GONE)
+# 5. Install Python packages
+#    pip will now build 'av' using the Cython we just installed
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 5. Copy the rest of your application code
+# 6. Copy the rest of your application code
 COPY . .
 
-# 6. Set the command to run your app
+# 7. Set the command to run your app
 CMD ["streamlit", "run", "app.py", "--server.port", "10000"]
