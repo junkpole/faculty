@@ -31,17 +31,12 @@ ENV PKG_CONFIG_PATH /usr/lib/x86_64-linux-gnu/pkgconfig:/usr/share/pkgconfig
 # 3. Copy your requirements file
 COPY requirements.txt .
 
-# 4. (THIS IS THE FIX)
-#    Install the correct Cython version *before* installing requirements
-#    av==10.0.0 requires Cython < 3.0
-RUN pip install --no-cache-dir Cython~=0.29.36
-
-# 5. Install Python packages
-#    This will now use the Cython version we just installed
+# 4. Install Python packages
+#    This will now use the Cython version specified IN requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 6. Copy the rest of your application code
+# 5. Copy the rest of your application code
 COPY . .
 
-# 7. Set the command to run your app
+# 6. Set the command to run your app
 CMD ["streamlit", "run", "app.py", "--server.port", "10000"]
