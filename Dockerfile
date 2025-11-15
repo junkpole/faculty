@@ -32,7 +32,7 @@ ENV PKG_CONFIG_PATH /usr/lib/x86_64-linux-gnu/pkgconfig:/usr/share/pkgconfig
 COPY requirements.txt .
 
 # 4. Install Python packages
-#    This will now use the Cython version specified IN requirements.txt
+#    (The separate Cython install is GONE)
 RUN pip install --no-cache-dir -r requirements.txt
 
 # 5. Copy the rest of your application code
