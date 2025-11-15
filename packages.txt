@@ -1,3 +1,14 @@
+# For OpenCV
 libgl1
 libglib2.0-0
+
+# For PyAV (FFmpeg) build
 ffmpeg
+pkg-config
+libavformat-dev
+libavcodec-dev
+libavdevice-dev
+libavutil-dev
+libavfilter-dev
+libswscale-dev
+libswresample-dev
