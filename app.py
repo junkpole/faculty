@@ -26,7 +26,7 @@ st.header("🎓 Teacher Presence Detector (Demo)")
 st.write("Click 'Start' to enable the webcam and begin detecting.")
 
 # Load the face detector
-face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcasacde_frontalface_default.xml')
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
 class VideoProcessor(VideoProcessorBase):
     def recv(self, frame):
@@ -56,7 +56,7 @@ rtc_configuration = RTCConfiguration(
 # The Web Component
 webrtc_streamer(
     key="classroom-feed",
-    mode=1, Done.
+    mode=1, # Send and Receive mode (This is the corrected line)
     rtc_configuration=rtc_configuration,
     video_processor_factory=VideoProcessor,
     media_stream_constraints={"video": True, "audio": False},
@@ -66,5 +66,6 @@ webrtc_streamer(
 )
 
 # --- Footer ---
+# This is the updated footer with your text and hyperlink
 st.markdown("---")
-st.caption("IT Department | Powered by Streamlit & OpenCV")
+st.caption("Copyright © Termez State University of Engineering and Agrotechnology / [IT Department](https://instagram.com/iamumarsatti/#)")
