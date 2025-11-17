@@ -28,15 +28,20 @@ RUN apt-get update && apt-get install -y \
 #    This tells pkg-config where to find the libraries
 ENV PKG_CONFIG_PATH /usr/lib/x86_64-linux-gnu/pkgconfig:/usr/share/pkgconfig
 
-# 3. Copy requirements file
+# 3. (THIS IS THE FIX)
+#    Upgrade pip to the latest version
+RUN pip install --no-cache-dir --upgrade pip
+RUN pip cache purge
+
+# 4. Copy requirements file
 COPY requirements.txt .
 
-# 4. Install Python packages
-#    (We removed the Cython pre-install and --no-build-isolation)
+# 5. Install Python packages
+#    The new pip will be able to resolve the dependencies correctly
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 5. Copy the rest of your application code
+# 6. Copy the rest of your application code
 COPY . .
 
-# 6. Set the command to run your app
+# 7. Set the command to run your app
 CMD ["streamlit", "run", "app.py", "--server.port", "10000"]
