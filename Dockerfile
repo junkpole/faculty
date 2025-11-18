@@ -1,47 +1,25 @@
-# Start from Debian Bookworm, which has newer ffmpeg libraries
-FROM python:3.10-slim-bookworm
+# We use Python 3.9 on Debian Bullseye
+# This specific version allows us to download pre-built binaries
+# instead of trying (and failing) to build them ourselves.
+FROM python:3.9-slim-bullseye
 
-# Set a working directory
 WORKDIR /app
 
-# 1. Update apt and install all the system dependencies
+# We only need the basic libraries for OpenCV now
+# No need for ffmpeg-dev or compilers because we will use binary wheels
 RUN apt-get update && apt-get install -y \
-    # For building packages
-    build-essential \
-    # For OpenCV
-    libgl1 \
+    libgl1-mesa-glx \
     libglib2.0-0 \
-    # For PyAV (FFmpeg) build
-    ffmpeg \
-    pkg-config \
-    libavformat-dev \
-    libavcodec-dev \
-    libavdevice-dev \
-    libavutil-dev \
-    libavfilter-dev \
-    libswscale-dev \
-    libswresample-dev \
-    # Clean up
     && rm -rf /var/lib/apt/lists/*
 
-# 2. SET THE ENVIRONMENT VARIABLE
-#    This tells pkg-config where to find the libraries
-ENV PKG_CONFIG_PATH /usr/lib/x86_64-linux-gnu/pkgconfig:/usr/share/pkgconfig
-
-# 3. (THIS IS THE FIX)
-#    Upgrade pip to the latest version
-RUN pip install --no-cache-dir --upgrade pip
-RUN pip cache purge
-
-# 4. Copy requirements file
 COPY requirements.txt .
 
-# 5. Install Python packages
-#    The new pip will be able to resolve the dependencies correctly
+# Upgrade pip to ensure we can download the binary wheels
+RUN pip install --no-cache-dir --upgrade pip
+
+# Install the packages
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 6. Copy the rest of your application code
 COPY . .
 
-# 7. Set the command to run your app
 CMD ["streamlit", "run", "app.py", "--server.port", "10000"]
